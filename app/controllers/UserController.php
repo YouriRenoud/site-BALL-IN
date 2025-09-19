@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/User.php';
 
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_users'])) {
     if (!empty($_POST['user_ids'])) {
         foreach ($_POST['user_ids'] as $userId) {
@@ -13,10 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_users'])) {
     }
 }
 
-$searchUsername = isset($_GET['search_username']) ? $_GET['search_username'] : '';
-
-if ($searchUsername !== '') {
-    $users = User::searchByUsername($searchUsername);
+if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
+    $searchTerm = trim($_GET['search']);
+    $users = User::findByUsername($searchTerm);
 } else {
     $users = User::all();
 }

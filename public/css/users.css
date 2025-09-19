@@ -1,9 +1,9 @@
 .square-container {
-    background: rgba(255, 255, 255, 0.7); /* blanc semi-transparent */
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 12px;
     padding: 40px;
     width: auto;
-    margin: 0 auto;               /* centré horizontalement */
+    margin: 0 auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     text-align: center;
 }
@@ -21,4 +21,14 @@
     outline: none;
     border-color: #ff6600;
     box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+}
+
+.highlight {
+    background-color: #ffeb3b; /* Jaune clair */
+    font-weight: bold;
+}
+
+@keyframes highlightAnimation {
+    0% { background-color: #ffeb3b; }
+    100% { background-color: #ffffff; }
 }

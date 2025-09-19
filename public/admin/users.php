@@ -47,7 +47,10 @@ $users = User::all();
                     </thead>
                     <tbody>
                         <?php foreach ($users as $user): ?>
-                            <tr>
+                            <?php 
+                                $isHighlighted = isset($_GET['search']) && stripos($user['username'], $_GET['search']) !== false;
+                            ?>
+                            <tr class="<?= $isHighlighted ? 'highlight' : '' ?>" id="<?= $isHighlighted ? 'user-' . $user['id'] : '' ?>">
                                 <td><input type="checkbox" name="user_ids[]" value="<?= $user['id'] ?>"></td>
                                 <td><?= htmlspecialchars($user['id']) ?></td>
                                 <td><?= htmlspecialchars($user['username']) ?></td>
@@ -66,5 +69,8 @@ $users = User::all();
 
     <?php include __DIR__ . '/../../resources/views/footer.php'; ?>
 
+    <script src="/path/to/your/js/search.js"></script>
+
     </body>
 </html>
+

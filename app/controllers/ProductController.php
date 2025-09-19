@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . '/../models/Product.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     $name        = trim($_POST['name']);
     $description = trim($_POST['description']);
     $price       = floatval($_POST['price']);
@@ -19,4 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$sort = $_GET['sort'] ?? 'name';
+$order = $_GET['order'] ?? 'ASC';
+$category_id = isset($_GET['category']) ? intval($_GET['category']) : null;
 
+$perPage = 6;
+$totalProducts = Product::countAll($category_id);
+$totalPages = ceil($totalProducts / $perPage);
+
+$products = Product::getPaginated($page, $perPage, $sort, $order, $category_id);

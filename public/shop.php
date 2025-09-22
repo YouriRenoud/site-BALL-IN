@@ -42,7 +42,7 @@ require_once __DIR__ . '/../app/controllers/ProductController.php';
                 <button type="submit" class="btn">Sort</button>
             </form>
 
-            <div class="product-grid" style="margin-top:20px;">
+            <div id="product-grid" class="product-grid" style="margin-top:20px;">
                 <?php foreach ($products as $product): ?>
                     <div class="product-card">
                         <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">

@@ -11,6 +11,12 @@ class Product {
         return $stmt->execute();
     }
 
+    public static function getCategories() {
+        global $conn;
+        $result = $conn->query("SELECT id, name FROM categories");
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public static function getPaginated($page = 1, $perPage = 6, $sort = 'name', $order = 'ASC', $category_id = null) {
         global $conn;
 

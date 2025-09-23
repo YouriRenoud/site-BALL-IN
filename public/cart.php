@@ -1,35 +1,8 @@
 <?php
 require_once __DIR__ . '/../app/functions/redirection.php';
 
+require_once __DIR__ . '/../app/controllers/CartController.php';
 require_once __DIR__ . '/../app/models/Cart.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Add product to cart if requested
-if (isset($_GET['add'])) {
-    $productId = (int)$_GET['add'];
-    Cart::addProduct($_SESSION['user_id'], $productId);
-    header("Location: cart.php");
-    exit;
-}
-
-// Load cart items
-$items = Cart::getProducts($_SESSION['user_id']);
-
-if (isset($_GET['remove'])) {
-    Cart::removeProduct($_SESSION['user_id'], (int)$_GET['remove']);
-    header("Location: cart.php");
-    exit;
-}
-
-// Check availability
-$availability = [];
-if (isset($_GET['check'])) {
-    $availability = Cart::checkAvailability((int)$_GET['check']);
-}
 
 $items = Cart::getProducts($_SESSION['user_id']);
 $total = array_reduce($items, fn($sum, $i) => $sum + $i['price'] * $i['quantity'], 0);
@@ -85,6 +58,12 @@ $total = array_reduce($items, fn($sum, $i) => $sum + $i['price'] * $i['quantity'
                         </ul>
                     </div>
                 <?php endif; ?>
+
+                <?php if (!empty($items)): ?>
+                    <h3>Total: <?= number_format($total, 2) ?> €</h3>
+                    <a href="checkout.php" class="btn">Validate Cart</a>
+                <?php endif; ?>
+
             </div>
         </main>
 

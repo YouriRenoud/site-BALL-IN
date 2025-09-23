@@ -67,7 +67,9 @@ class Product {
     public static function searchByName($term) {
         global $conn;
         $like = "%".$term."%";
-        $stmt = $conn->prepare("SELECT id, name FROM products WHERE name LIKE ? LIMIT 10");
+        $stmt = $conn->prepare("SELECT id, name
+                                FROM products
+                                WHERE name LIKE ? LIMIT 10");
         $stmt->bind_param("s", $like);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);

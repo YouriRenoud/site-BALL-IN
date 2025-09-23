@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/../app/controllers/ProductController.php';
+require_once __DIR__ . '/../app/models/Product.php';
+
+$categories = Product::getCategories();
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +41,11 @@ require_once __DIR__ . '/../app/controllers/ProductController.php';
                 <select name="order" class="sort-select">
                     <option value="ASC" <?= $order==='ASC'?'selected':'' ?>>Ascending</option>
                     <option value="DESC" <?= $order==='DESC'?'selected':'' ?>>Descending</option>
+                </select>
+                <select name="category" class="sort-select">
+                    <?php foreach ($categories as $cat): ?>
+                        <option value="<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></option>
+                    <?php endforeach; ?>
                 </select>
                 <button type="submit" class="btn">Sort</button>
             </form>

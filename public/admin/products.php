@@ -39,7 +39,7 @@ $categories = Product::getCategories();
                     <?php endforeach; ?>
                 </select>
 
-                <button type="submit" class="btn">Add Product</button>
+                <button type="submit" name="add_product" class="btn">Add Product</button>
             </form>
         </div>
     </main>

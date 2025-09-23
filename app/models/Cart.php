@@ -67,13 +67,22 @@ class Cart {
     public static function checkAvailability($productId) {
         global $conn;
 
-        $stmt = $conn->prepare("SELECT s.name, s.address, sp.stock_quantity 
+        $stmt = $conn->prepare("SELECT s.id as store_id, s.name, s.address, sp.stock_quantity
                                 FROM product_store sp
                                 JOIN stores s ON sp.store_id = s.id
                                 WHERE sp.product_id = ? AND sp.stock_quantity > 0");
         $stmt->bind_param("i", $productId);
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function clearUserCart($userId) {
+        global $conn;
+        $cartId = self::getUserCart($userId);
+
+        $stmt = $conn->prepare("DELETE FROM cart_items WHERE cart_id = ?");
+        $stmt->bind_param("i", $cartId);
+        $stmt->execute();
     }
 
 }

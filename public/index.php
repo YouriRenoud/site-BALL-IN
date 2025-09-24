@@ -6,6 +6,11 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
     exit;
 }
 
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'shop') {
+    header("Location: shop/index.php");
+    exit;
+}
+
 $isLoggedIn = isset($_SESSION['username']);
 ?>
 

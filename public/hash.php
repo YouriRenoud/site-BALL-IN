@@ -1,4 +1,4 @@
 <?php
-$hash = password_hash('johndoe', PASSWORD_DEFAULT);
+$hash = password_hash('gameTime', PASSWORD_DEFAULT);
 echo $hash;
 ?>

@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
-        header("Location: index.php"); // redirection vers la page d'accueil
+        header("Location: index.php");
         exit;
     } else {
         $error = "Incorrect username or password.";

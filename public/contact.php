@@ -21,9 +21,14 @@ if ($orderId) {
         <ul>
             <?php foreach ($orderItems as $item): ?>
                 <li>
-                    <?= htmlspecialchars($item['product_name']) ?> — 
-                    <?= number_format($item['price'], 2) ?> € 
-                    (Store: <?= htmlspecialchars($item['store_name']) ?>)
+                    <?= htmlspecialchars($item['quantity']) ?> ×
+                    <?= htmlspecialchars($item['product_name']) ?> —
+                    <strong><?= number_format($item['price'] * $item['quantity'], 2) ?> €</strong>
+                    (Store:
+                        <a href="<?= htmlspecialchars($item['store_address']) ?>" target="_blank">
+                            <?= htmlspecialchars($item['store_name']) ?>
+                        </a>
+                    )
                 </li>
             <?php endforeach; ?>
         </ul>

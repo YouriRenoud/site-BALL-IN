@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: checkout.php");
         exit;
     }
-
+    
     $orderId = Order::create($userId, $chosenStores);
 
     header("Location: contact.php?id=" . $orderId);

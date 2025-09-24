@@ -5,32 +5,68 @@ class Order {
     public static function create($userId, $chosenStores) {
         global $conn;
 
-        $stmt = $conn->prepare("INSERT INTO orders (user_id) VALUES (?)");
-        $stmt->bind_param("i", $userId);
-        if (!$stmt->execute()) {
-            die("Error creating order: " . $stmt->error);
-        }
-        $orderId = $stmt->insert_id;
+        $conn->begin_transaction();
+        try {
+            $stmt = $conn->prepare("INSERT INTO orders (user_id, created_at) VALUES (?, NOW())");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $orderId = $conn->insert_id;
 
-        $items = Cart::getProducts($userId);
+            $stmtCart = $conn->prepare("
+                SELECT ci.product_id, ci.quantity 
+                FROM cart_items ci
+                INNER JOIN carts c ON ci.cart_id = c.id
+                WHERE c.user_id = ?
+            ");
+            $stmtCart->bind_param("i", $userId);
+            $stmtCart->execute();
+            $cartItems = $stmtCart->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        foreach ($items as $item) {
-            if (!isset($chosenStores[$item['id']])) {
-                continue;
+            foreach ($cartItems as $item) {
+                $productId = $item['product_id'];
+                $qty       = $item['quantity'];
+                $storeId   = $chosenStores[$productId] ?? null;
+
+                if (!$storeId) {
+                    $conn->rollback();
+                    return false;
+                }
+
+                $stmt = $conn->prepare("SELECT stock_quantity FROM product_store WHERE product_id = ? AND store_id = ?");
+                $stmt->bind_param("ii", $productId, $storeId);
+                $stmt->execute();
+                $res = $stmt->get_result()->fetch_assoc();
+                $stock = $res['stock_quantity'] ?? 0;
+
+                if ($stock < $qty) {
+                    $conn->rollback();
+                    return false;
+                }
+
+                $stmtItem = $conn->prepare("
+                    INSERT INTO order_items (order_id, product_id, store_id, quantity) 
+                    VALUES (?, ?, ?, ?)
+                ");
+                $stmtItem->bind_param("iiii", $orderId, $productId, $storeId, $qty);
+                $stmtItem->execute();
+
+                $stmtStock = $conn->prepare("
+                    UPDATE product_store
+                    SET stock_quantity = stock_quantity - ?
+                    WHERE product_id = ? AND store_id = ?
+                ");
+                $stmtStock->bind_param("iii", $qty, $productId, $storeId);
+                $stmtStock->execute();
             }
-            $storeId = (int)$chosenStores[$item['id']];
-            $quantity = (int)$item['quantity'];
 
-            $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_id, store_id, quantity) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("iiii", $orderId, $item['id'], $storeId, $quantity);
-            if (!$stmt->execute()) {
-                die("Error adding product: " . $stmt->error);
-            }
+            Cart::clearUserCart($userId);
+            $conn->commit();
+            return $orderId;
+
+        } catch (Exception $e) {
+            $conn->rollback();
+            return false;
         }
-
-        Cart::clearUserCart($userId);
-
-        return $orderId;
     }
 
     public static function getOrdersById($userId) {
@@ -46,7 +82,7 @@ class Order {
 
     public static function getItems($orderId) {
         global $conn;
-        $stmt = $conn->prepare("SELECT oi.quantity, p.name AS product_name, p.price, s.name AS store_name
+        $stmt = $conn->prepare("SELECT oi.quantity, p.name AS product_name, p.price, s.name AS store_name, s.google_maps_link AS store_address
                                 FROM order_items oi
                                 JOIN products p ON oi.product_id = p.id
                                 JOIN stores s ON oi.store_id = s.id

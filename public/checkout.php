@@ -47,6 +47,10 @@ $items = Cart::getProducts($_SESSION['user_id']);
                 <?php endforeach; ?>
 
                 <button type="submit" class="btn">Confirm Order</button>
+
+                <?php if (empty($stores)) : ?>
+                    <p style="color:red;">One of the products is out of stock.</p>
+                <?php endif; ?>
             </form>
         </div>
     </main>

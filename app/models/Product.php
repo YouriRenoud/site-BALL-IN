@@ -64,6 +64,12 @@ class Product {
         }
     }
 
+    public static function getAll() {
+        global $conn;
+        $result = $conn->query("SELECT id, name, description, price, image_url FROM products");
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public static function searchByName($term) {
         global $conn;
         $like = "%".$term."%";

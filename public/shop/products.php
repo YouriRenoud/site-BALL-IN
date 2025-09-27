@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__ . '/../../app/controllers/ProductController.php';
+require_once __DIR__ . '/../../app/controllers/ShopController.php';
 require_once __DIR__ . '/../../app/models/Product.php';
-
 
 ?>
 
@@ -13,6 +12,9 @@ require_once __DIR__ . '/../../app/models/Product.php';
     </head>
     <body>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <?php include __DIR__ . '/../../resources/views/header.php'; ?>
     <link rel="stylesheet" href="../css/users.css">
 
@@ -49,11 +51,7 @@ require_once __DIR__ . '/../../app/models/Product.php';
 
             <h2>Add Existing Product to Store</h2>
             <form method="POST">
-                <select name="product_id" required>
-                    <?php foreach (Product::getAll() as $prod): ?>
-                        <option value="<?= $prod['id'] ?>"><?= htmlspecialchars($prod['name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <select name="product_id" id="product-select" style="width: 300px;" required></select>
                 <input type="number" name="quantity" placeholder="Stock" min="1" required>
                 <button type="submit" name="add_to_store" class="btn">Add to Store</button>
             </form>
@@ -61,6 +59,8 @@ require_once __DIR__ . '/../../app/models/Product.php';
     </main>
 
     <?php include __DIR__ . '/../../resources/views/footer.php'; ?>
+
+    <script src="../js/storeProducts.js"></script>
 
     </body>
 </html>

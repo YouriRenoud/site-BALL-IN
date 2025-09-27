@@ -1,3 +1,3 @@
 <footer>
-    <p>&copy; 2025 Ball'In. All rights reserved.</p>
+    <p>&copy; 2025 BallIn. All rights reserved.</p>
 </footer>

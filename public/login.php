@@ -30,8 +30,8 @@
                 </form>
 
                 <div class="links">
-                    <p>New to Ball'In ? <a href="signup.html">Sign up now !</a></p>
-                    <p><a href="forgot-password.html">Forgot your password ?</a></p>
+                    <p>New to Ball'In ? <a href="signup.php">Sign up now !</a></p>
+                    <p><a href="forgot-password.php">Forgot your password ?</a></p>
                 </div>
         
             </div>

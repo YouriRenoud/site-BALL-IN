@@ -5,5 +5,5 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="/Ball'In/public/css/global.css">
+<link rel="stylesheet" href="/BallIn/public/css/global.css">
 

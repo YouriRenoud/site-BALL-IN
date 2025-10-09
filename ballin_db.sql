@@ -51,6 +51,7 @@ CREATE TABLE stores (
     address VARCHAR(255) NOT NULL,
     google_maps_link VARCHAR(255),
     user_id INT,
+    is_validated TINYINT(1) DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
@@ -135,10 +136,10 @@ VALUES
 ('Headband Pack', 'Sweat-absorbent headbands.', 14.99, 'images/products/headband.jpg', 4);
 
 -- Magasins
-INSERT INTO stores (name, address, google_maps_link, user_id)
+INSERT INTO stores (name, address, google_maps_link, user_id, is_validated)
 VALUES
-('Game Time', '6 Rue Temponières, 31000 Toulouse, France', 'https://maps.app.goo.gl/H25deJR9VqwxZN2X6', 4),
-('Basket4Ballers', '31 Rue de Rivoli, 75004 Paris, France', 'https://maps.app.goo.gl/B2RZJ3mk96kRSASVA', 3);
+('Game Time', '6 Rue Temponières, 31000 Toulouse, France', 'https://maps.app.goo.gl/H25deJR9VqwxZN2X6', 4, 1),
+('Basket4Ballers', '31 Rue de Rivoli, 75004 Paris, France', 'https://maps.app.goo.gl/B2RZJ3mk96kRSASVA', 3, 1);
 
 -- Disponibilités produit/magasin
 INSERT INTO product_store (product_id, store_id, stock_quantity)

@@ -47,7 +47,7 @@ class Shop {
     public static function findStoreByUserId($userId) {
         global $conn;
         $stmt = $conn->prepare("
-            SELECT s.id, s.name, s.address, s.google_maps_link
+            SELECT s.id, s.name, s.address, s.google_maps_link, s.is_validated
             FROM stores s
             WHERE s.user_id = ?
         ");

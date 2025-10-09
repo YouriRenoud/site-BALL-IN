@@ -35,3 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+document.getElementById('is_shop').addEventListener('change', function() {
+    document.getElementById('shop_fields').style.display = this.checked ? 'block' : 'none';
+});

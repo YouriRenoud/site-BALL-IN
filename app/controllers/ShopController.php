@@ -3,7 +3,16 @@ require_once __DIR__ . '/../models/Shop.php';
 
 session_start();
 
-$storeId = Shop::findStoreByUserId($_SESSION['user_id']);
+$userId = $_SESSION['user_id'];
+
+$storeId = Shop::findStoreByUserId($userId);
+
+if (!$storeId) {
+} elseif (!$storeId['is_validated']) {
+    $pending = true;
+} else {
+    $pending = false;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_store'])) {
     $productId = intval($_POST['product_id']);

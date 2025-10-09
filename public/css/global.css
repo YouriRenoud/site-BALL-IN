@@ -254,11 +254,8 @@ footer {
     margin-top: auto;
 }
 
-/* ----------------------- */
-/* ✅ Responsive Design    */
-/* ----------------------- */
+/* Responsive Design    */
 
-/* Tablettes */
 @media (max-width: 992px) {
     header h1 {
         font-size: 2.2rem;
@@ -269,7 +266,7 @@ footer {
     }
 
     .product-grid {
-        grid-template-columns: 1fr 1fr; /* encore 2 colonnes */
+        grid-template-columns: 1fr 1fr;
         gap: 15px;
     }
 
@@ -285,7 +282,6 @@ footer {
     }
 }
 
-/* Mobiles */
 @media (max-width: 576px) {
     header {
         flex-direction: column;
@@ -313,7 +309,7 @@ footer {
     }
 
     .product-grid {
-        grid-template-columns: 1fr; /* une seule colonne */
+        grid-template-columns: 1fr;
     }
 
     .btn {

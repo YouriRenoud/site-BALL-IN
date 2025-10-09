@@ -38,21 +38,21 @@ class User {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public static function create($username, $email, $password, $birth_date, $address) {
+    public static function create($username, $email, $password, $birth_date, $address, $role) {
         global $conn;
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash, birth_date, address) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO users (username, email, password_hash, birth_date, address, role) VALUES (?, ?, ?, ?, ?, ?)");
         if (!$stmt) {
             die("Prepare failed: " . $conn->error);
         }
+        $stmt->bind_param("ssssss", $username, $email, $hash, $birth_date, $address, $role);
 
-        $stmt->bind_param("sssss", $username, $email, $hash, $birth_date, $address);
-        if (!$stmt->execute()) {
-            die("Execute failed: " . $stmt->error);
+        if ($stmt->execute()) {
+            return $conn->insert_id;
+        } else {
+            return false;
         }
-
-        return true;
     }
 
     public static function delete($id) {

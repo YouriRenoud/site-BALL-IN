@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../app/controllers/ProductController.php';
 require_once __DIR__ . '/../../app/models/Product.php';
+
 $categories = Product::getCategories();
 ?>
 
@@ -26,11 +27,11 @@ $categories = Product::getCategories();
                 <p style="color:green;"><?= htmlspecialchars($success) ?></p>
             <?php endif; ?>
 
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <input type="text" name="name" placeholder="Product name" required>
                 <textarea name="description" placeholder="Description"></textarea>
                 <input type="number" step="0.01" name="price" placeholder="Price (€)" required>
-                <input type="text" name="image_url" placeholder="Image URL (optional)">
+                <input type="file" name="image" accept="image/*">
                 
                 <select name="category_id" required>
                     <option value="">-- Select category --</option>

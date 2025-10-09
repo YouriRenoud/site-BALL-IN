@@ -26,9 +26,15 @@ class User {
         return $stmt->get_result()->fetch_assoc();
     }
 
-    public static function all() {
+    public static function allUsers() {
         global $conn;
-        $result = $conn->query("SELECT id, username, email, birth_date, address FROM users");
+        $result = $conn->query("SELECT id, username, email, birth_date, address FROM users WHERE role = 'user'");
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public static function allStores() {
+        global $conn;
+        $result = $conn->query("SELECT id, username, email, birth_date, address FROM users WHERE role = 'shop'");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 

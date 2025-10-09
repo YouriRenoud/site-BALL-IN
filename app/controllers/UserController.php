@@ -1,11 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/User.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require __DIR__ . '/../../vendor/autoload.php';
-
+require_once __DIR__ . '/../models/Store.php';
 session_start();
 
 $message = "";
@@ -19,6 +14,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_users'])) {
         $success = "Selected users have been deleted.";
     } else {
         $error = "No users selected.";
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_stores'])) {
+    if (!empty($_POST['user_ids'])) {
+        foreach ($_POST['user_ids'] as $userId) {
+            if ($userId == $_SESSION['user_id']) continue;
+            $stmt = $conn->prepare("SELECT id FROM stores WHERE user_id = $userId");
+            $stmt->execute();
+            $storeId = $stmt->get_result()->fetch_assoc();
+            Store::delete((int)$storeId['id']);
+            User::delete((int)$userId);
+        }
+        $success = "Selected stores have been deleted.";
+    } else {
+        $error = "No stores selected.";
     }
 }
 
@@ -42,49 +53,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_request'])) {
 
         $resetLink = "http://localhost/BallIn/public/reset-password.php?token=" . $token;
 
-        // ---- PHPMailer ----
-        $mail = new PHPMailer(true);
+        $subject = "Password Reset - Ball'In";
 
-        try {
-            // Config SMTP
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';      // serveur SMTP (ici Gmail)
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'yourirenoudgrappin@gmail.com';  // ton adresse Gmail
-            $mail->Password   = 'ton-mot-de-passe-app'; // mot de passe d'application Gmail
-            $mail->SMTPSecure = 'tls';
-            $mail->Port       = 587;
+        $messageBody = '
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: "Poppins", sans-serif;
+                    background-color: #f4f4f4;
+                    padding: 30px;
+                    color: #333;
+                }
+                .mail-container {
+                    background: #fff;
+                    border-radius: 10px;
+                    padding: 30px;
+                    max-width: 600px;
+                    margin: auto;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                }
+                h2 {
+                    color: #ff6600;
+                    text-align: center;
+                }
+                .btn {
+                    display: inline-block;
+                    background-color: #ff6600;
+                    color: #fff !important;
+                    padding: 12px 25px;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-weight: bold;
+                    margin: 20px 0;
+                    transition: 0.3s;
+                }
+                .btn:hover {
+                    background-color: #e65c00;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 20px;
+                    font-size: 14px;
+                    color: #777;
+                }
+                .logo {
+                    display: block;
+                    margin: 0 auto 20px;
+                    width: 100px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="mail-container">
+                <img src="https://i.ibb.co/4ZmT3yP/ballin-logo.png" alt="Ball\'In Logo" class="logo">
+                <h2>Password Reset Request</h2>
+                <p>Hello,</p>
+                <p>We received a request to reset your password for your <strong>Ball\'In</strong> account.</p>
+                <p>Click the button below to choose a new password:</p>
+                <div style="text-align:center;">
+                    <a href="' . $resetLink . '" class="btn">Reset My Password</a>
+                </div>
+                <p>If you didn’t request this, you can safely ignore this email — your password will remain unchanged.</p>
+                <p class="footer">© ' . date("Y") . ' Ball\'In — All rights reserved.</p>
+            </div>
+        </body>
+        </html>
+        ';
 
-            // Expéditeur et destinataire
-            $mail->setFrom('no-reply@ballin.com', "Ball'In");
-            $mail->addAddress($email);
+        $headers = "From: Ball'In <no-reply@ballin.com>\r\n";
+        $headers .= "Reply-To: support@ballin.com\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-            // Contenu
-            $mail->isHTML(true);
-            $mail->Subject = "Password Reset - Ball'In";
-            $mail->Body    = "Hello,<br><br>Click here to reset your password:<br>
-                            <a href='$resetLink'>$resetLink</a><br><br>
-                            If you did not request a reset, ignore this email.";
-
-            $mail->send();
-            $message = "A reset link has been sent to $email.";
-
-        } catch (Exception $e) {
-            $message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        // send email
+        if (mail($email, $subject, $messageBody, $headers)) {
+            $message = "✅ A reset link has been sent to your email address.";
+        } else {
+            $message = "⚠️ Email could not be sent. Please check your mail configuration.";
         }
     } else {
-        $message = "This email does not exist in our database.";
+        $message = "❌ This email does not exist in our database.";
     }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_password'])) {
-
     $token = $_POST['token'];
     $password = $_POST['password'];
     $confirm = $_POST['confirm'];
 
     if ($password !== $confirm) {
-        $message = "Les mots de passe ne correspondent pas.";
+        $message = "Passwords do not match.";
     } else {
         $stmt = $conn->prepare("SELECT user_id, expires_at FROM password_resets WHERE token = ?");
         $stmt->bind_param("s", $token);
@@ -102,9 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset_password'])) {
             $stmt->bind_param("s", $token);
             $stmt->execute();
 
-            $message = "Password changed successfully. <a href='login.php' class='btn'>Log in</a>";
+            $message = "✅ Password changed successfully. <a href='login.php' class='btn'>Log in</a>";
         } else {
-            $message = "Invalid or expired link.";
+            $message = "⚠️ Invalid or expired reset link.";
         }
     }
 }
@@ -113,5 +172,5 @@ if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
     $searchTerm = trim($_GET['search']);
     $users = User::findByUsername($searchTerm);
 } else {
-    $users = User::all();
+    $users = User::allUsers();
 }

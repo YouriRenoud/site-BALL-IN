@@ -2,13 +2,13 @@
 require_once __DIR__ . '/../../app/controllers/UserController.php';
 require_once __DIR__ . '/../../app/models/User.php';
 
-$users = User::allUsers();
+$stores = User::allStores();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Manage Users</title>
+        <title>Manage Stores</title>
         <?php include __DIR__ . '/../../resources/views/head.php'; ?>
         <link rel="stylesheet" href="../css/users.css">
     </head>
@@ -18,7 +18,7 @@ $users = User::allUsers();
 
     <main>
         <div class="square-container">
-            <h1>Manage Users</h1>
+            <h1>Manage Stores</h1>
 
             <form method="GET" action="">
                 <input type="text" name="search" placeholder="Search by username" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>" />
@@ -46,23 +46,23 @@ $users = User::allUsers();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($users as $user): ?>
-                            <?php 
-                                $isHighlighted = isset($_GET['search']) && stripos($user['username'], $_GET['search']) !== false;
+                        <?php foreach ($stores as $store): ?>
+                            <?php
+                                $isHighlighted = isset($_GET['search']) && stripos($store['username'], $_GET['search']) !== false;
                             ?>
-                            <tr class="<?= $isHighlighted ? 'highlight' : '' ?>" id="<?= $isHighlighted ? 'user-' . $user['id'] : '' ?>">
-                                <td><input type="checkbox" name="user_ids[]" value="<?= $user['id'] ?>"></td>
-                                <td><?= htmlspecialchars($user['id']) ?></td>
-                                <td><?= htmlspecialchars($user['username']) ?></td>
-                                <td><?= htmlspecialchars($user['email']) ?></td>
-                                <td><?= htmlspecialchars($user['birth_date']) ?></td>
-                                <td><?= htmlspecialchars($user['address']) ?></td>
+                            <tr class="<?= $isHighlighted ? 'highlight' : '' ?>" id="<?= $isHighlighted ? 'user-' . $store['id'] : '' ?>">
+                                <td><input type="checkbox" name="user_ids[]" value="<?= $store['id'] ?>"></td>
+                                <td><?= htmlspecialchars($store['id']) ?></td>
+                                <td><?= htmlspecialchars($store['username']) ?></td>
+                                <td><?= htmlspecialchars($store['email']) ?></td>
+                                <td><?= htmlspecialchars($store['birth_date']) ?></td>
+                                <td><?= htmlspecialchars($store['address']) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
 
-                <button type="submit" name="delete_users" class="btn" style="margin-top: 20px;">Delete Selected Users</button>
+                <button type="submit" name="delete_stores" class="btn" style="margin-top: 20px;">Delete Selected Stores</button>
             </form>
         </div>
     </main>

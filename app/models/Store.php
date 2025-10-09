@@ -17,4 +17,11 @@ class Store {
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
+
+    public static function delete($id) {
+        global $conn;
+        $stmt = $conn->prepare("DELETE FROM stores WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
 }

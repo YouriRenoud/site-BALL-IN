@@ -76,39 +76,52 @@ It includes:
 BallIn/
 │── app/
 │   ├── controllers/
-│   │   ├── UserController.php
+│   │   ├── AuthController.php
+│   │   ├── CartController.php
+│   │   ├── InscriptionController.php
+│   │   ├── OrderController.php
 │   │   ├── ProductController.php
 │   │   ├── ShopController.php
-│   │   └── OrderController.php
+│   │   └── UserController.php
 │   ├── models/
-│   │   ├── User.php
-│   │   ├── Product.php
-│   │   ├── Store.php
 │   │   ├── Cart.php
-│   │   └── Order.php
+│   │   ├── Category.php
+│   │   ├── Order.php
+│   │   ├── Product.php
+│   │   ├── Shop.php
+│   │   ├── Store.php
+│   │   └── User.php
 │   └── functions/
-│       └── redirection.php
+│   │   ├── redirection.php
+│   │   ├── searchProduct.php
 │
 │── public/
 │   ├── index.php
 │   ├── login.php
+│   ├── logout.php
+│   ├── signup.php
 │   ├── register.php
 │   ├── forgot-password.php
 │   ├── reset-password.php
 │   ├── cart.php
 │   ├── checkout.php
 │   ├── contact.php
-│   ├── products.php
+│   ├── shop.php
 │   ├── store/products.php (shop management)
 │   ├── search.php (AJAX search)
 │   └── css/
-│       └── style.css
+│   │   ├── global.css
+│   │   ├── searchMenu.css
+│   │   ├── users.css
 │
 │── resources/
 │   └── views/
 │       ├── header.php
 │       ├── footer.php
 │       └── head.php
+│
+│── config/
+│   ├── config.php
 │
 │── vendor/ (Composer dependencies, PHPMailer)
 │── ballin_db.sql
@@ -142,7 +155,7 @@ composer install
 - Import `ballin_db.sql`
 
 ### 4. Config Database
-Edit `app/config/database.php`:
+Edit `app/config/config.php`:
 
 ```php
 $conn = new mysqli("localhost", "root", "", "ballin_db");

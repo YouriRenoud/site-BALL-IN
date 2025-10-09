@@ -116,7 +116,8 @@ VALUES
 ('admin', 'admin@ballin.com', '$2y$10$0Alq1nd88sZT5getWZEUiuAYNtCp5NpWBQ6XtsG4D6W1RlM3vAiny', '1990-01-01', '10 Rue du Panier, Toulouse', 'admin'),
 ('johndoe', 'john@gmail.com', '$2y$10$aIoEKPaFNJo1sP/WZnAxWu1IzwKocPHmp1QHSrpGEA3PhrEG.KPp2', '2000-05-10', '25 Avenue du Sport, Paris', 'user'),
 ('b4b', 'b4b@gmail.com', '$2y$10$Y4r/Uh4wTf4DDYn2GyP0NugnHXGDxvHU4tBYnAikmJrcE9cs8HplW', '1995-03-15', '30 Rue de la Paix, Paris', 'shop'),
-('gameTime', 'gametime@gmail.com', '$2y$10$o/IRkCx5dsQ7AcvIINALtuixx48G0L9uXg4lXFEUPxvk9ZW9o2jPK', '1998-07-22', '40 Rue des Jeux, Toulouse', 'shop');
+('gameTime', 'gametime@gmail.com', '$2y$10$o/IRkCx5dsQ7AcvIINALtuixx48G0L9uXg4lXFEUPxvk9ZW9o2jPK', '1998-07-22', '40 Rue des Jeux, Toulouse', 'shop'),
+('Lhasir', 'yourirenoudgrappe@gmail.com', '$2y$10$yc5GJFsMAV4EgbJXs66bU.E/Qww7gtHqLqWRRYvlO7KtPhdVz3b6i', '2003-11-20', '34 Rue de Franche Comté, Narbonne', 'user');
 
 -- Catégories
 INSERT INTO categories (name) VALUES

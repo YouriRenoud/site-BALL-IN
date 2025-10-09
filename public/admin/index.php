@@ -22,6 +22,7 @@ $isLoggedIn = isset($_SESSION['username']);
             <div class="btn-group">
                 <a href="products.php" class="btn">Manage products</a>
                 <a href="users.php" class="btn">Manage users</a>
+                <a href="shop.php" class="btn">Manage shops</a>
                 <a href="../logout.php" class="btn">Logout</a>
             </div>
         </main>

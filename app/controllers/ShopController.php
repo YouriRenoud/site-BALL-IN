@@ -5,14 +5,15 @@ session_start();
 
 $userId = $_SESSION['user_id'];
 
-$storeId = Shop::findStoreByUserId($userId);
+$store = Shop::findStoreByUserId($userId);
 
-if (!$storeId) {
-} elseif (!$storeId['is_validated']) {
+if (!$store) {
+} elseif (!$store['is_validated']) {
     $pending = true;
 } else {
     $pending = false;
 }
+$storeId = $store['id'] ?? null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_store'])) {
     $productId = intval($_POST['product_id']);
